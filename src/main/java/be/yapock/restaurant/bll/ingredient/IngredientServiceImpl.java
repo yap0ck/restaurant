@@ -3,6 +3,7 @@ package be.yapock.restaurant.bll.ingredient;
 import be.yapock.restaurant.dal.models.Ingredient;
 import be.yapock.restaurant.dal.repositories.IngredientRepository;
 import be.yapock.restaurant.pl.models.ingredient.IngredientForm;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public Ingredient getOne(String id) {
-        return null;
+        return ingredientRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("ingrédient pas trouvé"));
     }
 
     @Override
