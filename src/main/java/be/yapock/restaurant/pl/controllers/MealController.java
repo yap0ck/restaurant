@@ -1,11 +1,11 @@
 package be.yapock.restaurant.pl.controllers;
 
 import be.yapock.restaurant.bll.meal.MealService;
+import be.yapock.restaurant.pl.models.meal.MealDto;
 import be.yapock.restaurant.pl.models.meal.MealForm;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/meal")
@@ -18,7 +18,12 @@ public class MealController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping
-    public void create(MealForm form){
+    public void create(@RequestBody MealForm form){
         mealService.create(form);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MealDto> getOne(@PathVariable String id){
+        return ResponseEntity.ok(MealDto.fromEntity(mealService.getOne(id)));
     }
 }
