@@ -5,6 +5,7 @@ import be.yapock.restaurant.dal.repositories.UserRepository;
 import be.yapock.restaurant.pl.config.security.JWTProvider;
 import be.yapock.restaurant.pl.models.user.AuthDTO;
 import be.yapock.restaurant.pl.models.user.LoginForm;
+import be.yapock.restaurant.pl.models.user.UserDTO;
 import be.yapock.restaurant.pl.models.user.UserForm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,5 +45,11 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByLogin(form.login()).orElseThrow(()->new UsernameNotFoundException("utilisateur pas trouvé"));
         String token = jwtProvider.generateToken(user.getLogin());
         return new AuthDTO(user.getLogin(), token);
+    }
+
+    @Override
+    public UserDTO getOne(long id) {
+        User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("utilisateur pas trouvé"));
+        return new UserDTO(user.getFirstName(), user.getLastName(), user.getLogin());
     }
 }
