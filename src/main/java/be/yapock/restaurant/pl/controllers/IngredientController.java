@@ -33,4 +33,9 @@ public class IngredientController {
     public ResponseEntity<Page<IngredientDTO>> getAll(Pageable pageable){
         return ResponseEntity.ok(ingredientService.getAll(pageable).map(IngredientDTO::fromEntity));
     }
+
+    @PutMapping("{id}")
+    public void update(@PathVariable String id, @RequestBody IngredientForm form){
+        ingredientService.update(id, form);
+    }
 }

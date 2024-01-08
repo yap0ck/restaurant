@@ -37,7 +37,10 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public void update(String id, IngredientForm form) {
-
+        Ingredient ingredient = getOne(id);
+        ingredient.setIngredientName(form.ingredientName());
+        ingredient.setUnit(form.unit());
+        ingredientRepository.save(ingredient);
     }
 
     @Override
