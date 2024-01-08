@@ -7,6 +7,8 @@ import be.yapock.restaurant.dal.repositories.UserRepository;
 import be.yapock.restaurant.pl.models.recipe.RecipeForm;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -34,5 +36,10 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Recipe getOne(long id) {
         return recipeRepository.findById(id).orElseThrow(()->new EntityNotFoundException("recette non trouvée"));
+    }
+
+    @Override
+    public Page<Recipe> getAll(Pageable pageable) {
+        return recipeRepository.findAll(pageable);
     }
 }
