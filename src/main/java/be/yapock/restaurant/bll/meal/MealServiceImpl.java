@@ -37,7 +37,10 @@ public class MealServiceImpl implements MealService{
 
     @Override
     public void update(String mealName, MealForm form) {
-
+        Meal meal = getOne(mealName);
+        meal.setMealName(form.mealName());
+        meal.setOrigine(form.mealOrigine());
+        mealRepository.save(meal);
     }
 
     @Override

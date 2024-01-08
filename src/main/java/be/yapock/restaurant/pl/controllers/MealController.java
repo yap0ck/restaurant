@@ -33,4 +33,10 @@ public class MealController {
     public ResponseEntity<Page<MealDto>> getAll(Pageable pageable){
         return ResponseEntity.ok(mealService.getAll(pageable).map(MealDto::fromEntity));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}")
+    public void update(String id, MealForm form){
+        mealService.update(id,form);
+    }
 }
