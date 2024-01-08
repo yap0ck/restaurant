@@ -8,6 +8,8 @@ import be.yapock.restaurant.pl.models.user.UserForm;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -33,5 +35,11 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDTO getOne(@PathVariable long id){
         return userService.getOne(id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping
+    public List<UserDTO> getAll(){
+        return userService.getAll();
     }
 }

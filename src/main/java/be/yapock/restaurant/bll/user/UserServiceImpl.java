@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
@@ -51,5 +53,12 @@ public class UserServiceImpl implements UserService{
     public UserDTO getOne(long id) {
         User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("utilisateur pas trouvé"));
         return new UserDTO(user.getFirstName(), user.getLastName(), user.getLogin());
+    }
+
+    @Override
+    public List<UserDTO> getAll() {
+        return userRepository.findAll().stream()
+                .map(UserDTO::fromEntity)
+                .toList();
     }
 }
