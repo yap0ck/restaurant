@@ -15,4 +15,5 @@ public interface UserService {
     User getOne(long id);
     List<User> getAll();
     void update(UserForm form, long id, Authentication authentication);
+    void delete(long id, Authentication authentication);
 }

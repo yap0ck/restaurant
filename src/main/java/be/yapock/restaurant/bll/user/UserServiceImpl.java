@@ -74,4 +74,11 @@ public class UserServiceImpl implements UserService{
         user.setLogin(form.login());
         user.setPassword(form.password());
     }
+
+    @Override
+    public void delete(long id, Authentication authentication) {
+        User userConnected = userRepository.findByLogin(authentication.getName()).orElseThrow(()->new UsernameNotFoundException("utilisateur non trouvé"));
+        if (!userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("utilisateur non trouvé")).getLogin().equals(userConnected.getLogin())) throw new BadCredentialsException("acces non authorisé");
+        userRepository.deleteById(id);
+    }
 }

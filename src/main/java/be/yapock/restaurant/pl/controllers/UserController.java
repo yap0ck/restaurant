@@ -51,4 +51,10 @@ public class UserController {
     public void update(@PathVariable long id, @RequestBody UserForm form, Authentication authentication){
         userService.update(form,id,authentication);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable long id, Authentication authentication){
+        userService.delete(id, authentication);
+    }
 }
