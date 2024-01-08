@@ -8,7 +8,9 @@ import be.yapock.restaurant.pl.models.user.LoginForm;
 import be.yapock.restaurant.pl.models.user.UserDTO;
 import be.yapock.restaurant.pl.models.user.UserForm;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public AuthDTO login(LoginForm form) {
+        if (form==null) throw new IllegalArgumentException("form peut pas être null");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(form.login(),form.password()));
         User user = userRepository.findByLogin(form.login()).orElseThrow(()->new UsernameNotFoundException("utilisateur pas trouvé"));
         String token = jwtProvider.generateToken(user.getLogin());
@@ -50,15 +53,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDTO getOne(long id) {
-        User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("utilisateur pas trouvé"));
-        return new UserDTO(user.getFirstName(), user.getLastName(), user.getLogin());
+    public User getOne(long id) {
+        return userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("utilisateur pas trouvé"));
+
     }
 
     @Override
-    public List<UserDTO> getAll() {
-        return userRepository.findAll().stream()
-                .map(UserDTO::fromEntity)
-                .toList();
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void update(UserForm form, long id, Authentication authentication) {
+        User userConnected = userRepository.findByLogin(authentication.getName()).orElseThrow(()->new UsernameNotFoundException("utilisateur non trouvé"));
+        if (form==null) throw new IllegalArgumentException("form peut pas être null");
+        if (!userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("utilisateur non trouvé")).getLogin().equals(userConnected.getLogin())) throw new BadCredentialsException("acces non authorisé");
+        User user = getOne(id);
+        user.setFirstName(form.firstName());
+        user.setLastName(form.lastName());
+        user.setLogin(form.login());
+        user.setPassword(form.password());
     }
 }
