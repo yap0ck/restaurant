@@ -10,4 +10,5 @@ public interface RecipeService {
     void create(RecipeForm form, Authentication authentication);
     Recipe getOne(long id);
     Page<Recipe> getAll(Pageable pageable);
+    void update(long id, RecipeForm form, Authentication authentication);
 }

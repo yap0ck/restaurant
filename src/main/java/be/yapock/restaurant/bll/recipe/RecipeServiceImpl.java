@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,14 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Page<Recipe> getAll(Pageable pageable) {
         return recipeRepository.findAll(pageable);
+    }
+
+    @Override
+    public void update(long id, RecipeForm form, Authentication authentication) {
+        User user = userRepository.findByLogin(authentication.getName()).orElseThrow(()->new UsernameNotFoundException("utilisateur non trouvé"));
+        Recipe recipe = getOne(id);
+        if (!user.equals(recipe.getUser())) throw new BadCredentialsException("acces non authorizé");
+        recipe.setInstructions(form.instructions());
+        recipeRepository.save(recipe);
     }
 }

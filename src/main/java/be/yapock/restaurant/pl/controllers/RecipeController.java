@@ -39,4 +39,10 @@ public class RecipeController {
     public ResponseEntity<Page<RecipeDTO>> getAll(Pageable pageable){
         return ResponseEntity.ok(recipeService.getAll(pageable).map(RecipeDTO::fromEntity));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}")
+    public void update(@PathVariable long id, @RequestBody RecipeForm form, Authentication authentication){
+        recipeService.update(id, form, authentication);
+    }
 }

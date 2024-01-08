@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService{
         user.setLastName(form.lastName());
         user.setLogin(form.login());
         user.setPassword(form.password());
+        userRepository.save(user);
     }
 
     @Override
