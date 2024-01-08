@@ -39,4 +39,10 @@ public class MealController {
     public void update(String id, MealForm form){
         mealService.update(id,form);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("{id}")
+    public void delete(String id){
+        mealService.delete(id);
+    }
 }
