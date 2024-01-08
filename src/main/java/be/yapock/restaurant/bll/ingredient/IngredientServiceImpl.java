@@ -32,7 +32,7 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public Page<Ingredient> getAll(Pageable pageable) {
-        return null;
+        return ingredientRepository.findAll(pageable);
     }
 
     @Override
