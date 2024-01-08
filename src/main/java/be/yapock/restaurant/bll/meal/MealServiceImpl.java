@@ -32,7 +32,7 @@ public class MealServiceImpl implements MealService{
 
     @Override
     public Page<Meal> getAll(Pageable pageable) {
-        return null;
+        return mealRepository.findAll(pageable);
     }
 
     @Override

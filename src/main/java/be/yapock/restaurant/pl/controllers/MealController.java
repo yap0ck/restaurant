@@ -3,6 +3,8 @@ package be.yapock.restaurant.pl.controllers;
 import be.yapock.restaurant.bll.meal.MealService;
 import be.yapock.restaurant.pl.models.meal.MealDto;
 import be.yapock.restaurant.pl.models.meal.MealForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +27,10 @@ public class MealController {
     @GetMapping("/{id}")
     public ResponseEntity<MealDto> getOne(@PathVariable String id){
         return ResponseEntity.ok(MealDto.fromEntity(mealService.getOne(id)));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<MealDto>> getAll(Pageable pageable){
+        return ResponseEntity.ok(mealService.getAll(pageable).map(MealDto::fromEntity));
     }
 }
