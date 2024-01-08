@@ -34,8 +34,15 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientService.getAll(pageable).map(IngredientDTO::fromEntity));
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("{id}")
     public void update(@PathVariable String id, @RequestBody IngredientForm form){
         ingredientService.update(id, form);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id){
+        ingredientService.delete(id);
     }
 }

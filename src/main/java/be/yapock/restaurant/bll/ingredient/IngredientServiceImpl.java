@@ -45,6 +45,6 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public void delete(String id) {
-
+        ingredientRepository.deleteById(id);
     }
 }
