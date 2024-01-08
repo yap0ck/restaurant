@@ -6,8 +6,9 @@ import java.util.List;
 
 public record RecipeDTO(
         String instructions,
-        long userId) {
+        long userId,
+        String meal) {
     public static RecipeDTO fromEntity(Recipe recipe){
-        return new RecipeDTO(recipe.getInstructions(),recipe.getUser().getId());
+        return new RecipeDTO(recipe.getInstructions(),recipe.getUser().getId(),recipe.getMeal().getMealName());
     }
 }

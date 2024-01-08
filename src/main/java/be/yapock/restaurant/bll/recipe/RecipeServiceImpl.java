@@ -1,5 +1,6 @@
 package be.yapock.restaurant.bll.recipe;
 
+import be.yapock.restaurant.bll.meal.MealService;
 import be.yapock.restaurant.dal.models.Recipe;
 import be.yapock.restaurant.dal.models.User;
 import be.yapock.restaurant.dal.repositories.RecipeRepository;
@@ -18,10 +19,12 @@ import org.springframework.stereotype.Service;
 public class RecipeServiceImpl implements RecipeService{
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final MealService mealService;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, MealService mealService) {
         this.recipeRepository = recipeRepository;
         this.userRepository = userRepository;
+        this.mealService = mealService;
     }
 
     @Override
@@ -30,6 +33,7 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe = Recipe.builder()
                 .instructions(form.instructions())
                 .user(user)
+                .meal(mealService.getOne(form.mealName()))
                 .build();
         recipeRepository.save(recipe);
     }
@@ -50,6 +54,7 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe = getOne(id);
         if (!user.equals(recipe.getUser())) throw new BadCredentialsException("acces non authorizé");
         recipe.setInstructions(form.instructions());
+        recipe.setMeal(mealService.getOne(form.mealName()));
         recipeRepository.save(recipe);
     }
 
