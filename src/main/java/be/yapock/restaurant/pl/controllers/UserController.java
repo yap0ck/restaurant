@@ -5,6 +5,7 @@ import be.yapock.restaurant.pl.models.user.AuthDTO;
 import be.yapock.restaurant.pl.models.user.LoginForm;
 import be.yapock.restaurant.pl.models.user.UserDTO;
 import be.yapock.restaurant.pl.models.user.UserForm;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -34,16 +35,16 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public UserDTO getOne(@PathVariable long id){
-        return UserDTO.fromEntity(userService.getOne(id));
+    public ResponseEntity<UserDTO> getOne(@PathVariable long id){
+        return ResponseEntity.ok(UserDTO.fromEntity(userService.getOne(id)));
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping
-    public List<UserDTO> getAll(){
-        return userService.getAll().stream()
+    public ResponseEntity<List<UserDTO>> getAll(){
+        return ResponseEntity.ok(userService.getAll().stream()
                 .map(UserDTO::fromEntity)
-                .toList();
+                .toList());
     }
 
     @PreAuthorize("isAuthenticated()")

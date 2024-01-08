@@ -1,9 +1,6 @@
 package be.yapock.restaurant.dal.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,12 +16,15 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-
-    String lastName;
-    String firstName;
-    String login;
-    String password;
+    private long id;
+    @Column(length = 50)
+    private String lastName;
+    @Column(length = 50)
+    private String firstName;
+    @Column(length = 50)
+    private String login;
+    @Column(length = 50)
+    private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
