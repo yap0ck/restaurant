@@ -5,6 +5,8 @@ import be.yapock.restaurant.dal.models.User;
 import be.yapock.restaurant.dal.repositories.RecipeRepository;
 import be.yapock.restaurant.dal.repositories.UserRepository;
 import be.yapock.restaurant.pl.models.recipe.RecipeForm;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,5 +29,10 @@ public class RecipeServiceImpl implements RecipeService{
                 .user(user)
                 .build();
         recipeRepository.save(recipe);
+    }
+
+    @Override
+    public Recipe getOne(long id) {
+        return recipeRepository.findById(id).orElseThrow(()->new EntityNotFoundException("recette non trouvée"));
     }
 }
