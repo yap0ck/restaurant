@@ -52,4 +52,12 @@ public class RecipeServiceImpl implements RecipeService{
         recipe.setInstructions(form.instructions());
         recipeRepository.save(recipe);
     }
+
+    @Override
+    public void delete(long id, Authentication authentication) {
+        User user = userRepository.findByLogin(authentication.getName()).orElseThrow(()->new UsernameNotFoundException("utilisateur non trouvé"));
+        Recipe recipe = getOne(id);
+        if (!user.equals(recipe.getUser())) throw new BadCredentialsException("acces non authorizé");
+        recipeRepository.delete(recipe);
+    }
 }

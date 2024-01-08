@@ -45,4 +45,10 @@ public class RecipeController {
     public void update(@PathVariable long id, @RequestBody RecipeForm form, Authentication authentication){
         recipeService.update(id, form, authentication);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable long id, Authentication authentication){
+        recipeService.delete(id, authentication);
+    }
 }
